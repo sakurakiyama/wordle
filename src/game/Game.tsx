@@ -132,6 +132,12 @@ function Game() {
             </div>
           </div>
         )}
+        <div
+          className='font-semibold text-2xl md:text-3xl text-center pb-4'
+          style={{ fontFamily: 'var(--font-patua)' }}
+        >
+          Painfully Difficult Wordle
+        </div>
         <Board />
         <Keyboard />
       </div>
