@@ -65,6 +65,23 @@ function Board(): JSX.Element {
                       inputRefs
                     );
                   }
+                  if (e.code === 'Enter') {
+                    handleGuessWord(
+                      rowIndex,
+                      wordAttempts,
+                      setNumberOfGuesses,
+                      wordOfTheDay,
+                      setCorrectLetters,
+                      setIncorrectlyPlacedLetters,
+                      inputRefs,
+                      setIncorrectLetters,
+                      setShowModal,
+                      setGuessedCorrectly,
+                      setCurrentRowIndex,
+                      setCurrentColIndex,
+                      rowRefs
+                    );
+                  }
                 }}
               ></input>
             );
