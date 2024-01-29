@@ -132,7 +132,9 @@ export const handleGuessWord = (
     if (nextRowIndex < wordAttempts.length) {
       setCurrentRowIndex(nextRowIndex);
       setCurrentColIndex(0);
-      inputRefs.current[nextRowIndex * 8]?.focus();
+      setTimeout(() => {
+        inputRefs.current[nextRowIndex * 8]?.focus();
+      }, 100);
     } else {
       setShowModal(true);
       setGuessedCorrectly(false);
