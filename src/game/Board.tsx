@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { FaRegArrowAltCircleRight } from 'react-icons/fa';
 import { GameContext } from './Game';
 import { handleDelete, handleGuessWord, handleCodeChange } from '../utils';
@@ -20,6 +20,10 @@ function Board(): JSX.Element {
     wordOfTheDay,
     setGuessedCorrectly,
   } = useContext(GameContext)!;
+
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
 
   return (
     <div>
