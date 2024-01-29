@@ -87,45 +87,51 @@ export const handleGuessWord = (
     // Iterate through the guessed word
     wordAttempts[rowIndex].forEach((letter, colIndex) => {
       const isCorrect = letter.toUpperCase() === wordOfTheDay[colIndex];
-      if (isCorrect) {
-        setCorrectLetters((prevState) => {
-          if (prevState.includes(letter)) return prevState;
-          return [...prevState, letter];
-        });
-        setIncorrectlyPlacedLetters((prevState) => {
-          const removedCorrect = prevState.filter((current) => {
-            if (current !== letter) return current;
+      setTimeout(() => {
+        if (isCorrect) {
+          setCorrectLetters((prevState) => {
+            if (prevState.includes(letter)) return prevState;
+            return [...prevState, letter];
           });
-          return removedCorrect;
-        });
-        // If correct, set the background color to green
-        inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-          'bg-[var(--olive-green)]',
-          'text-white',
-          'border-[var(--olive-green)]'
-        );
-        // If the letter placement is incorrect but the letter exists in the word of the day
-      } else if (wordOfTheDay.includes(letter)) {
-        setIncorrectlyPlacedLetters((prevState) => {
-          if (prevState.includes(letter)) return prevState;
-          return [...prevState, letter];
-        });
-        inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-          'bg-[var(--mustard)]',
-          'text-white',
-          'border-[var(--mustard)]'
-        );
-      } else {
-        setIncorrectLetters((prevState) => {
-          if (prevState.includes(letter)) return prevState;
-          return [...prevState, letter];
-        });
-        inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-          'bg-slate-700',
-          'text-white',
-          'border-slate-700'
-        );
-      }
+          setIncorrectlyPlacedLetters((prevState) => {
+            const removedCorrect = prevState.filter((current) => {
+              if (current !== letter) return current;
+            });
+            return removedCorrect;
+          });
+          // If correct, set the background color to green
+
+          inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+            'bg-[var(--olive-green)]',
+            'text-white',
+            'border-[var(--olive-green)]',
+            'animate-flip'
+          );
+          // If the letter placement is incorrect but the letter exists in the word of the day
+        } else if (wordOfTheDay.includes(letter)) {
+          setIncorrectlyPlacedLetters((prevState) => {
+            if (prevState.includes(letter)) return prevState;
+            return [...prevState, letter];
+          });
+          inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+            'bg-[var(--mustard)]',
+            'text-white',
+            'border-[var(--mustard)]',
+            'animate-flip'
+          );
+        } else {
+          setIncorrectLetters((prevState) => {
+            if (prevState.includes(letter)) return prevState;
+            return [...prevState, letter];
+          });
+          inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+            'bg-slate-700',
+            'text-white',
+            'border-slate-700',
+            'animate-flip'
+          );
+        }
+      }, colIndex * 100);
     });
 
     const nextRowIndex = rowIndex + 1;
@@ -143,13 +149,18 @@ export const handleGuessWord = (
   // If the attempt is correct
   else {
     wordAttempts[rowIndex].forEach((_, colIndex) => {
-      inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-        'bg-[var(--olive-green)]',
-        'text-white',
-        'border-[var(--olive-green)]'
-      );
+      setTimeout(() => {
+        inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+          'bg-[var(--olive-green)]',
+          'text-white',
+          'border-[var(--olive-green)]',
+          'animate-flip'
+        );
+      }, colIndex * 100);
     });
-    setShowModal(true);
-    setGuessedCorrectly(true);
+    setTimeout(() => {
+      setShowModal(true);
+      setGuessedCorrectly(true);
+    }, 2800);
   }
 };

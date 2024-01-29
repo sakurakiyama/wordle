@@ -15,10 +15,19 @@ export default {
             transform: 'translateX(5px)',
           },
         },
+        flip: {
+          '0%': {
+            transform: 'perspective(400px) rotateX(0deg)',
+          },
+          '100%': {
+            transform: 'perspective(400px) rotateX(360deg)',
+          },
+        },
       },
     },
     animation: {
       shake: 'shake 0.5s ease-in-out',
+      flip: 'flip 2s 1',
     },
   },
   plugins: [],
