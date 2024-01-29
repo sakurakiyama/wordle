@@ -77,7 +77,7 @@ function Keyboard() {
         <div key={`row-${rowIndex}`}>
           {row.map((display, colIndex) => (
             <button
-              className={`border p-2 rounded-md m-1 min-w-10 h-16  font-semibold shadow-sm ${
+              className={`border p-2 rounded-md m-1 md:min-w-10 h-16 font-semibold shadow-sm ${
                 incorrectLetters.includes(display)
                   ? 'bg-slate-700 text-white'
                   : incorrectlyPlacedLetters.includes(display)

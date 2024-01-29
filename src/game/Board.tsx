@@ -34,7 +34,7 @@ function Board(): JSX.Element {
             return (
               <input
                 key={`input-${rowIndex}-${colIndex}`}
-                className={`border-2 w-10 h-10 text-sm md:text-base md:w-12 md:h-12 rounded-sm text-center text-lg font-semibold focus:outline-none focus:border-slate-500 m-1`}
+                className={`border-2 w-8 h-8 text-sm md:text-base md:w-12 md:h-12 rounded-sm text-center text-lg font-semibold focus:outline-none focus:border-slate-500 m-1`}
                 maxLength={1}
                 disabled={
                   numberOfGuesses >= rowIndex + 1 ||
