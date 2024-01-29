@@ -69,7 +69,7 @@ export const handleGuessWord = (
 ) => {
   const attempt = wordAttempts[rowIndex].join('');
   if (attempt !== wordOfTheDay) {
-    // If the attempt isn't a complete word, shake ad don't go to the next row
+    // If the attempt isn't a complete word, shake and don't go to the next row
     if (attempt.length !== 8) {
       const currentRowRef = rowRefs[rowIndex].current;
       if (currentRowRef) {
@@ -142,8 +142,10 @@ export const handleGuessWord = (
         inputRefs.current[nextRowIndex * 8]?.focus();
       }, 100);
     } else {
-      setShowModal(true);
-      setGuessedCorrectly(false);
+      setTimeout(() => {
+        setShowModal(true);
+        setGuessedCorrectly(false);
+      }, 2800);
     }
   }
   // If the attempt is correct
