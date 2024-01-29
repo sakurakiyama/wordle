@@ -67,7 +67,7 @@ function Game() {
   useEffect(() => {
     const getWordOfTheDay = async () => {
       const { data } = await axios.get(
-        'https://painfullydifficultwordle.fly.dev/words/getWordOfTheDay'
+        'https://painfullydifficultwordle.fly.dev/api/words/getWordOfTheDay'
       );
       setWordOfTheDay(data.word.toUpperCase());
       const { data: wordData } = await axios.get(
