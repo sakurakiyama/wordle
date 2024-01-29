@@ -61,7 +61,8 @@ export const handleGuessWord = (
   setIncorrectlyPlacedLetters: React.Dispatch<React.SetStateAction<string[]>>,
   inputRefs: React.MutableRefObject<(HTMLInputElement | null)[]>,
   setIncorrectLetters: React.Dispatch<React.SetStateAction<string[]>>,
-  setShowConfetti: React.Dispatch<React.SetStateAction<boolean>>,
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setGuessedCorrectly: React.Dispatch<React.SetStateAction<boolean>>,
   setCurrentRowIndex: React.Dispatch<React.SetStateAction<number>>,
   setCurrentColIndex: React.Dispatch<React.SetStateAction<number>>,
   rowRefs: React.MutableRefObject<HTMLDivElement | null>[]
@@ -132,6 +133,9 @@ export const handleGuessWord = (
       setCurrentRowIndex(nextRowIndex);
       setCurrentColIndex(0);
       inputRefs.current[nextRowIndex * 8]?.focus();
+    } else {
+      setShowModal(true);
+      setGuessedCorrectly(false);
     }
   }
   // If the attempt is correct
@@ -143,9 +147,7 @@ export const handleGuessWord = (
         'border-[var(--olive-green)]'
       );
     });
-    setShowConfetti(true);
-    setTimeout(() => {
-      setShowConfetti(false);
-    }, 5000);
+    setShowModal(true);
+    setGuessedCorrectly(true);
   }
 };

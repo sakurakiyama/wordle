@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 import { GameContext } from './Game';
-import Confetti from 'react-confetti';
-import { useWindowSize } from 'react-use/lib/';
 import { handleDelete, handleGuessWord, handleCodeChange } from '../utils';
 
 function Keyboard() {
@@ -9,8 +7,8 @@ function Keyboard() {
     setNumberOfGuesses,
     wordAttempts,
     setWordAttempts,
-    showConfetti,
-    setShowConfetti,
+    setShowModal,
+    setGuessedCorrectly,
     setIncorrectLetters,
     incorrectLetters,
     setIncorrectlyPlacedLetters,
@@ -25,8 +23,6 @@ function Keyboard() {
     rowRefs,
     wordOfTheDay,
   } = useContext(GameContext)!;
-
-  const { width, height } = useWindowSize();
 
   const keyboardChars = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -56,7 +52,8 @@ function Keyboard() {
         setIncorrectlyPlacedLetters,
         inputRefs,
         setIncorrectLetters,
-        setShowConfetti,
+        setShowModal,
+        setGuessedCorrectly,
         setCurrentRowIndex,
         setCurrentColIndex,
         rowRefs
@@ -76,8 +73,6 @@ function Keyboard() {
 
   return (
     <div className='flex flex-col items-center mt-4'>
-      {showConfetti && <Confetti width={width} height={height} />}
-
       {keyboardChars.map((row, rowIndex) => (
         <div key={`row-${rowIndex}`}>
           {row.map((display, colIndex) => (

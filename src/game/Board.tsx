@@ -1,7 +1,5 @@
 import { useContext } from 'react';
 import { FaRegArrowAltCircleRight } from 'react-icons/fa';
-import Confetti from 'react-confetti';
-import { useWindowSize } from 'react-use/lib/';
 import { GameContext } from './Game';
 import { handleDelete, handleGuessWord, handleCodeChange } from '../utils';
 
@@ -11,8 +9,7 @@ function Board(): JSX.Element {
     setNumberOfGuesses,
     wordAttempts,
     setWordAttempts,
-    showConfetti,
-    setShowConfetti,
+    setShowModal,
     setIncorrectLetters,
     setIncorrectlyPlacedLetters,
     setCorrectLetters,
@@ -21,13 +18,11 @@ function Board(): JSX.Element {
     setCurrentRowIndex,
     rowRefs,
     wordOfTheDay,
+    setGuessedCorrectly,
   } = useContext(GameContext)!;
-
-  const { width, height } = useWindowSize();
 
   return (
     <div>
-      {showConfetti && <Confetti width={width} height={height} />}
       {rowRefs.map((currentRowRef, rowIndex) => (
         <div
           ref={currentRowRef}
@@ -86,7 +81,8 @@ function Board(): JSX.Element {
                 setIncorrectlyPlacedLetters,
                 inputRefs,
                 setIncorrectLetters,
-                setShowConfetti,
+                setShowModal,
+                setGuessedCorrectly,
                 setCurrentRowIndex,
                 setCurrentColIndex,
                 rowRefs
