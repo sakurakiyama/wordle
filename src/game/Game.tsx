@@ -106,7 +106,7 @@ function Game() {
       <div className='mt-20 text-xs md:text-base'>
         {showModal && (
           <div className='top-0 bottom-0 left-0 right-0 fixed bg-[#010502A2] flex justify-center items-center'>
-            <div className='z-1 bg-white max-w-96 md:max-w-lg w-full h-fit rounded-md shadow-sm flex flex-col items-center justify-center border-2 border-[var(--hot-pink)] relative p-6'>
+            <div className='z-1 bg-white opacity-100 max-w-96 md:max-w-lg w-full h-fit rounded-md shadow-sm flex flex-col items-center justify-center border-2 border-[var(--hot-pink)] relative p-6'>
               <button
                 className='absolute top-0 right-0 m-2'
                 onClick={() => setShowModal(false)}
