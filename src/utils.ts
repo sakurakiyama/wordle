@@ -1,3 +1,8 @@
+export const containsNonAlphabetChars = (word: string) => {
+  const pattern = /[^a-zA-Z]/;
+  return pattern.test(word);
+};
+
 // Handles input values
 export const handleCodeChange = (
   colIndex: number,
@@ -69,8 +74,8 @@ export const handleGuessWord = (
 ) => {
   const attempt = wordAttempts[rowIndex].join('');
   if (attempt !== wordOfTheDay) {
-    // If the attempt isn't a complete word, shake and don't go to the next row
-    if (attempt.length !== 8) {
+    // If the attempt isn't a complete word or it has non alphabet chars, shake and don't go to the next row
+    if (attempt.length !== 8 || containsNonAlphabetChars(attempt)) {
       const currentRowRef = rowRefs[rowIndex].current;
       if (currentRowRef) {
         currentRowRef.classList.add('animate-shake');
