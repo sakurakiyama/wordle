@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const containsNonAlphabetChars = (word: string) => {
   const pattern = /[^a-zA-Z]/;
   return pattern.test(word);
@@ -57,7 +59,7 @@ export const handleDelete = (
 };
 
 // Handles guessing the word
-export const handleGuessWord = (
+export const handleGuessWord = async (
   rowIndex: number,
   wordAttempts: string[][],
   setNumberOfGuesses: React.Dispatch<React.SetStateAction<number>>,
@@ -73,101 +75,108 @@ export const handleGuessWord = (
   rowRefs: React.MutableRefObject<HTMLDivElement | null>[]
 ) => {
   const attempt = wordAttempts[rowIndex].join('');
-  if (attempt !== wordOfTheDay) {
-    // If the attempt isn't a complete word or it has non alphabet chars, shake and don't go to the next row
-    if (attempt.length !== 8 || containsNonAlphabetChars(attempt)) {
-      const currentRowRef = rowRefs[rowIndex].current;
-      if (currentRowRef) {
-        currentRowRef.classList.add('animate-shake');
-        setTimeout(() => {
-          currentRowRef.classList.remove('animate-shake');
-        }, 1000);
-      }
-      return;
-    }
-    // If the attempt is wrong, go to the next row.
-    setNumberOfGuesses((prevState) => {
-      return prevState + 1;
-    });
-    // Iterate through the guessed word
-    wordAttempts[rowIndex].forEach((letter, colIndex) => {
-      const isCorrect = letter.toUpperCase() === wordOfTheDay[colIndex];
-      setTimeout(() => {
-        if (isCorrect) {
-          setCorrectLetters((prevState) => {
-            if (prevState.includes(letter)) return prevState;
-            return [...prevState, letter];
-          });
-          setIncorrectlyPlacedLetters((prevState) => {
-            const removedCorrect = prevState.filter((current) => {
-              if (current !== letter) return current;
-            });
-            return removedCorrect;
-          });
-          // If correct, set the background color to green
 
+  try {
+    const url = import.meta.env.VITE_SERVERURL;
+    const { data } = await axios.get(`${url}/isValidWord/${attempt}`);
+    if (attempt !== wordOfTheDay) {
+      // If the attempt isn't a complete word or it has non alphabet chars, shake and don't go to the next row
+      if (attempt.length !== 8 || containsNonAlphabetChars(attempt) || !data) {
+        const currentRowRef = rowRefs[rowIndex].current;
+        if (currentRowRef) {
+          currentRowRef.classList.add('animate-shake');
+          setTimeout(() => {
+            currentRowRef.classList.remove('animate-shake');
+          }, 1000);
+        }
+        return;
+      }
+      // If the attempt is wrong, go to the next row.
+      setNumberOfGuesses((prevState) => {
+        return prevState + 1;
+      });
+      // Iterate through the guessed word
+      wordAttempts[rowIndex].forEach((letter, colIndex) => {
+        const isCorrect = letter.toUpperCase() === wordOfTheDay[colIndex];
+        setTimeout(() => {
+          if (isCorrect) {
+            setCorrectLetters((prevState) => {
+              if (prevState.includes(letter)) return prevState;
+              return [...prevState, letter];
+            });
+            setIncorrectlyPlacedLetters((prevState) => {
+              const removedCorrect = prevState.filter((current) => {
+                if (current !== letter) return current;
+              });
+              return removedCorrect;
+            });
+            // If correct, set the background color to green
+
+            inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+              'bg-[var(--olive-green)]',
+              'text-white',
+              'border-[var(--olive-green)]',
+              'animate-flip'
+            );
+            // If the letter placement is incorrect but the letter exists in the word of the day
+          } else if (wordOfTheDay.includes(letter)) {
+            setIncorrectlyPlacedLetters((prevState) => {
+              if (prevState.includes(letter)) return prevState;
+              return [...prevState, letter];
+            });
+            inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+              'bg-[var(--mustard)]',
+              'text-white',
+              'border-[var(--mustard)]',
+              'animate-flip'
+            );
+          } else {
+            setIncorrectLetters((prevState) => {
+              if (prevState.includes(letter)) return prevState;
+              return [...prevState, letter];
+            });
+            inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
+              'bg-slate-700',
+              'text-white',
+              'border-slate-700',
+              'animate-flip'
+            );
+          }
+        }, colIndex * 100);
+      });
+
+      const nextRowIndex = rowIndex + 1;
+      if (nextRowIndex < wordAttempts.length) {
+        setCurrentRowIndex(nextRowIndex);
+        setCurrentColIndex(0);
+        setTimeout(() => {
+          inputRefs.current[nextRowIndex * 8]?.focus();
+        }, 100);
+      } else {
+        setTimeout(() => {
+          setShowModal(true);
+          setGuessedCorrectly(false);
+        }, 2800);
+      }
+    }
+    // If the attempt is correct
+    else {
+      wordAttempts[rowIndex].forEach((_, colIndex) => {
+        setTimeout(() => {
           inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
             'bg-[var(--olive-green)]',
             'text-white',
             'border-[var(--olive-green)]',
             'animate-flip'
           );
-          // If the letter placement is incorrect but the letter exists in the word of the day
-        } else if (wordOfTheDay.includes(letter)) {
-          setIncorrectlyPlacedLetters((prevState) => {
-            if (prevState.includes(letter)) return prevState;
-            return [...prevState, letter];
-          });
-          inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-            'bg-[var(--mustard)]',
-            'text-white',
-            'border-[var(--mustard)]',
-            'animate-flip'
-          );
-        } else {
-          setIncorrectLetters((prevState) => {
-            if (prevState.includes(letter)) return prevState;
-            return [...prevState, letter];
-          });
-          inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-            'bg-slate-700',
-            'text-white',
-            'border-slate-700',
-            'animate-flip'
-          );
-        }
-      }, colIndex * 100);
-    });
-
-    const nextRowIndex = rowIndex + 1;
-    if (nextRowIndex < wordAttempts.length) {
-      setCurrentRowIndex(nextRowIndex);
-      setCurrentColIndex(0);
-      setTimeout(() => {
-        inputRefs.current[nextRowIndex * 8]?.focus();
-      }, 100);
-    } else {
+        }, colIndex * 100);
+      });
       setTimeout(() => {
         setShowModal(true);
-        setGuessedCorrectly(false);
+        setGuessedCorrectly(true);
       }, 2800);
     }
-  }
-  // If the attempt is correct
-  else {
-    wordAttempts[rowIndex].forEach((_, colIndex) => {
-      setTimeout(() => {
-        inputRefs.current[rowIndex * 8 + colIndex]?.classList.add(
-          'bg-[var(--olive-green)]',
-          'text-white',
-          'border-[var(--olive-green)]',
-          'animate-flip'
-        );
-      }, colIndex * 100);
-    });
-    setTimeout(() => {
-      setShowModal(true);
-      setGuessedCorrectly(true);
-    }, 2800);
+  } catch (error) {
+    console.error(`An error has occured: ${error}`);
   }
 };
